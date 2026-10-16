@@ -10,6 +10,10 @@
                 <span class="app-cl-code">{{ $user->email }}</span>
             </label>
             <label>
+                <b>Name *</b>
+                <input type="text" name="name" value="{{ old('name', $user->name) }}" required />
+            </label>
+            <label>
                 <b>Role</b>
                 <span class="app-cl-code">{{ $user->role }}</span>
             </label>

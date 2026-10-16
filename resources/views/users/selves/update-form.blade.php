@@ -5,17 +5,10 @@
     <form action="{{ route('users.selves.update') }}" method="post">
         @csrf
         <div class="app-cmp-data-form">
-            @can('updateEmail', $user)
-                <label>
-                    <b>Email *</b>
-                    <input type="email" name="email" value="{{ old('email', $user->email) }}" required />
-                </label>
-            @else
-                <label>
-                    <b>Email</b>
-                    <span class="app-cl-code">{{ $user->email }}</span>
-                </label>
-            @endcan
+                       <label>
+                <b>Email</b>
+                <span class="app-cl-code">{{ $user->email }}</span>
+            </label>
             <label>
                 <b>Name *</b>
                 <input type="text" name="name" value="{{ old('name', $user->name) }}" required />

@@ -33,11 +33,6 @@ class UserPolicy
     }
 
 
-    function updateEmail(User $user, User $target): bool
-    {
-        return $user->isAdministrator() && $this->isSelf($user, $target);
-    }
-
 
     function delete(User $user, User $target): bool
     {

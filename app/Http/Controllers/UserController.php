@@ -257,12 +257,7 @@ class UserController extends SearchableController
 
         $data = $request->getParsedBody() ?? [];
 
-        $canUpdateEmail = Gate::allows('updateEmail', $user);
-
-        $validator = Validator::make($data, [
-            'name' => ['required'],
-            'email' => $canUpdateEmail ? ['required', 'email', "unique:users,email,{$user->id}"] : [],
-        ]);
+               $validator = Validator::make($data, ['name' => ['required']]);
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
@@ -275,9 +270,7 @@ class UserController extends SearchableController
         try {
             $user->fill($data);
 
-            if ($canUpdateEmail) {
-                $user->email = $data['email'];
-            }
+           
 
             $user->save();
 

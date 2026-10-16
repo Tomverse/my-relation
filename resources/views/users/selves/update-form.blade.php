@@ -5,13 +5,13 @@
     <form action="{{ route('users.selves.update') }}" method="post">
         @csrf
         <div class="app-cmp-data-form">
-                       <label>
+            <label>
                 <b>Email</b>
                 <span class="app-cl-code">{{ $user->email }}</span>
             </label>
             <label>
-                <b>Name *</b>
-                <input type="text" name="name" value="{{ old('name', $user->name) }}" required />
+                <b>Role</b>
+                <span class="app-cl-code">{{ $user->role }}</span>
             </label>
             <label>
                 <b>Password</b>

@@ -22,8 +22,11 @@
         <dt>Email</dt>
         <dd class="app-cl-code">{{ $user->email }}</dd>
 
-        <dt>Name</dt>
+                <dt>Name</dt>
         <dd>{{ $user->name }}</dd>
+
+        <dt>Role</dt>
+        <dd class="app-cl-code">{{ $user->role }}</dd>
     </dl>
 
 @endsection

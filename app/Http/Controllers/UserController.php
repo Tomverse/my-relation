@@ -250,27 +250,35 @@ class UserController extends SearchableController
         ]);
     }
 
-    function updateSelf(ServerRequestInterface $request): RedirectResponse
+        function updateSelf(ServerRequestInterface $request): RedirectResponse
     {
         $user = Auth::user();
         assert($user instanceof User);
 
         $data = $request->getParsedBody() ?? [];
 
-        $validator = Validator::make($data, ['name' => ['required']]);
+        $canUpdateEmail = Gate::allows('updateEmail', $user);
+
+        $validator = Validator::make($data, [
+            'name' => ['required'],
+            'email' => $canUpdateEmail ? ['required', 'email', "unique:users,email,{$user->id}"] : [],
+        ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        
         if (($data['password'] ?? '') === '') {
             unset($data['password']);
         }
 
         try {
-            
             $user->fill($data);
+
+            if ($canUpdateEmail) {
+                $user->email = $data['email'];
+            }
+
             $user->save();
 
             if (session()->has('bookmarks.users.selves.update')) {
@@ -293,5 +301,6 @@ class UserController extends SearchableController
                 'alert' => $excp->getMessage(),
             ]);
         }
-    }
-}
+    
+        }
+        }

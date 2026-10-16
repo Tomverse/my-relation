@@ -28,17 +28,17 @@ class UserController extends SearchableController
     {
         return [
             'term' => [
-                'email' => static fn (Builder $query, string $word)
-                    => $query->where('email', 'LIKE', "%{$word}%"),
-                'name' => static fn (Builder $query, string $word)
-                    => $query->where('name', 'LIKE', "%{$word}%"),
-                'role' => static fn (Builder $query, string $word)
-                    => $query->where('role', 'LIKE', "%{$word}%"),
+                'email' => static fn(Builder $query, string $word)
+                => $query->where('email', 'LIKE', "%{$word}%"),
+                'name' => static fn(Builder $query, string $word)
+                => $query->where('name', 'LIKE', "%{$word}%"),
+                'role' => static fn(Builder $query, string $word)
+                => $query->where('role', 'LIKE', "%{$word}%"),
             ],
         ];
     }
 
-  
+
     #[\Override]
     function find(string $code): Model
     {
@@ -101,7 +101,7 @@ class UserController extends SearchableController
         $data = $validator->validated();
 
         try {
-            
+
             $user = new User();
             $user->fill($data);
             $user->email = $data['email'];
@@ -166,7 +166,7 @@ class UserController extends SearchableController
             return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        
+
         if (($data['password'] ?? '') === '') {
             unset($data['password']);
         }
@@ -174,7 +174,7 @@ class UserController extends SearchableController
         try {
             $user->fill($data);
 
-            
+
             if ($canUpdateRole) {
                 $user->role = $data['role'];
             }
@@ -217,7 +217,7 @@ class UserController extends SearchableController
                 session()->get('bookmarks.users.delete') ?? route('users.index'),
             )->with('status', "User {$user->email} was deleted.");
         } catch (QueryException $excp) {
-           
+
             return redirect()->back()->withErrors([
                 'alert' => $excp->errorInfo[2] ?? $excp->getMessage(),
             ]);
@@ -234,7 +234,7 @@ class UserController extends SearchableController
         assert($user instanceof User);
 
         return view('users.selves.view', [
-            'title' => 'Self',
+            'title' => $user->email,
             'user' => $user,
         ]);
     }
@@ -245,19 +245,19 @@ class UserController extends SearchableController
         assert($user instanceof User);
 
         return view('users.selves.update-form', [
-            'title' => 'Self',
+            'title' => $user->email,
             'user' => $user,
         ]);
     }
 
-        function updateSelf(ServerRequestInterface $request): RedirectResponse
+    function updateSelf(ServerRequestInterface $request): RedirectResponse
     {
         $user = Auth::user();
         assert($user instanceof User);
 
         $data = $request->getParsedBody() ?? [];
 
-               $validator = Validator::make($data, ['name' => ['required']]);
+        $validator = Validator::make($data, ['name' => ['required']]);
 
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator);
@@ -270,7 +270,7 @@ class UserController extends SearchableController
         try {
             $user->fill($data);
 
-           
+
 
             $user->save();
 
@@ -294,6 +294,5 @@ class UserController extends SearchableController
                 'alert' => $excp->getMessage(),
             ]);
         }
-    
-        }
-        }
+    }
+}
